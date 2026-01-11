@@ -1,0 +1,5 @@
+{
+  "name": "Cisco DCAUTO 300-635 Flashcards",
+  "description": "A minimalist, dark-mode flashcard application for Cisco DCAUTO exam preparation with Pomodoro timer and spaced repetition logic.",
+  "requestFramePermissions": []
+}

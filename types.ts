@@ -10,6 +10,7 @@ export interface Question {
   domain: Domain;
   q: string;
   a: string;
+  d: string[];  // 3 plausible wrong answers
 }
 
 export interface Stats {

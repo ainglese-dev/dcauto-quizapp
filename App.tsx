@@ -40,26 +40,9 @@ export default function App() {
     totalAnswered: 0
   });
 
-  // Generate options (1 correct + 3 distractors)
-  const generateOptions = useCallback((currentQ: Question, allQuestions: Question[]) => {
-    // 1. Get potential distractors (same domain, not current question)
-    // If mixed domain, we prefer distractors from same domain, but fallback to any if needed
-    let pool = allQuestions.filter(q => q.id !== currentQ.id);
-    
-    // Prefer same domain for better distractors
-    const sameDomainPool = pool.filter(q => q.domain === currentQ.domain);
-    if (sameDomainPool.length >= 3) {
-      pool = sameDomainPool;
-    }
-
-    // 2. Get unique answers to avoid duplicate options
-    const uniqueAnswers = Array.from(new Set(pool.map(q => q.a)));
-    
-    // 3. Shuffle and pick 3
-    const distractors = shuffle(uniqueAnswers).slice(0, 3);
-    
-    // 4. Combine and shuffle
-    return shuffle([...distractors, currentQ.a]);
+  // Generate options (1 correct + 3 distractors from question)
+  const generateOptions = useCallback((currentQ: Question) => {
+    return shuffle([...currentQ.d, currentQ.a]);
   }, []);
 
   // Initialize Quiz
@@ -78,7 +61,7 @@ export default function App() {
     
     // Setup first card options
     if (shuffledDeck.length > 0) {
-      setCurrentOptions(generateOptions(shuffledDeck[0], questions));
+      setCurrentOptions(generateOptions(shuffledDeck[0]));
       setIsAnswered(false);
       setSelectedOption(null);
     }
@@ -133,7 +116,7 @@ export default function App() {
       const nextIndex = currentIndex + 1;
       setCurrentIndex(nextIndex);
       // Generate new options for the next card
-      setCurrentOptions(generateOptions(deck[nextIndex], questions));
+      setCurrentOptions(generateOptions(deck[nextIndex]));
       setIsAnswered(false);
       setSelectedOption(null);
     } else {
